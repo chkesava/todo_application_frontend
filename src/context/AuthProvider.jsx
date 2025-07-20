@@ -1,40 +1,29 @@
 import { useState, useEffect } from "react";
+import Cookies from "js-cookie";
 import { AuthContext } from "./auth-context";
 
 export default function AuthProvider({ children }) {
   const [user, setUser] = useState(() => {
-    try {
-      const saved = localStorage.getItem("user");
-      return saved ? JSON.parse(saved) : null;
-    } catch {
-      return null;
-    }
+    try { return JSON.parse(localStorage.getItem("user")) || null; }
+    catch { return null; }
   });
-
-  const [token, setToken] = useState(() => localStorage.getItem("token") || null);
+  const [token, setToken] = useState(() => Cookies.get("token") || null);
 
   useEffect(() => {
-    if (user) {
-      localStorage.setItem("user", JSON.stringify(user));
-    } else {
-      localStorage.removeItem("user");
-    }
-
-    if (token) {
-      localStorage.setItem("token", token);
-    } else {
-      localStorage.removeItem("token");
-    }
+    if (token) Cookies.set("token", token, { expires: 7, secure: true, sameSite: "Strict" });
+    else Cookies.remove("token");
+    if (user) localStorage.setItem("user", JSON.stringify(user));
+    else localStorage.removeItem("user");
   }, [user, token]);
 
   const login = (userData, token) => {
     setUser(userData);
     setToken(token);
   };
-
   const logout = () => {
     setUser(null);
     setToken(null);
+    Cookies.remove("token");
     localStorage.clear();
   };
 

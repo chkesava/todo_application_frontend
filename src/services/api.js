@@ -1,14 +1,9 @@
 import axios from "axios";
-
-const API = axios.create({
-  baseURL: "https://todo-application-backend-fe81.onrender.com/api",
-});
-
-API.interceptors.request.use(config => {
-  const token = localStorage.getItem("token");
+import Cookies from "js-cookie";
+const API = axios.create({ baseURL: "http://localhost:5000/api" });
+API.interceptors.request.use((config) => {
+  const token = Cookies.get("token");
   if (token) config.headers.Authorization = `Bearer ${token}`;
   return config;
 });
-
 export default API;
-  

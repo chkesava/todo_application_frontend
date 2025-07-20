@@ -7,26 +7,28 @@ export default function TodoList({ filters, refreshFlag, onChange }) {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    async function fetch() {
+    async function fetchTodos() {
       setLoading(true);
       try {
         const { data } = await API.get("/todos", { params: filters });
         setTodos(data.todos || []);
-      } catch {
-        alert("Failed to load todos.");
       } finally {
         setLoading(false);
       }
     }
-    fetch();
+    fetchTodos();
   }, [filters, refreshFlag]);
 
-  if (loading) return <div className="p-4 text-center">Loading...</div>;
-  if (!todos.length)
-    return <div className="p-4 text-center text-gray-500">No to-dos found.</div>;
+  if (loading) {
+    return <div className="text-center py-4 text-blue-500 font-semibold">Loading your todos...</div>;
+  }
+
+  if (!todos.length) {
+    return <div className="text-center text-gray-500 py-4 text-lg">📭 You have no to-dos yet!</div>;
+  }
 
   return (
-    <ul className="space-y-4 mt-4">
+    <ul className="space-y-4">
       {todos.map((todo) => (
         <TodoItem key={todo._id} todo={todo} onChange={onChange} />
       ))}
