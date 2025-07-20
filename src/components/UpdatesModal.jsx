@@ -1,22 +1,28 @@
 import { useEffect } from "react";
 
 const updatesData = [
-  {
-    date: "2025-07-20",
-    title: "Backend Security Update",
-    description: "Improved authentication flows and rate limiting for all API endpoints.",
-  },
-  {
-    date: "2025-07-21",
-    title: "UI Overhaul",
-    description: "Applied neon Perplexity-inspired dark visual theme across the entire app.",
-  },
-  {
-    date: "2025-08-01",
-    title: "Scheduled Downtime",
-    description: "App maintenance window: Aug 1, 11:00 PM – 1:00 AM IST.",
-  }
+  // {
+  //   date: "2025-07-20",
+  //   title: "Backend Security Update",
+  //   description: "Improved authentication flows and rate limiting for all API endpoints.",
+  // },
+  // {
+  //   date: "2025-07-21",
+  //   title: "UI Overhaul",
+  //   description: "Applied neon Perplexity-inspired dark visual theme across the entire app.",
+  // },
+  // {
+  //   date: "2025-08-01",
+  //   title: "Scheduled Downtime",
+  //   description: "App maintenance window: Aug 1, 11:00 PM – 1:00 AM IST.",
+  // }
   // Add more updates as needed
+  {
+    date: "TO be announced",
+    title: "kanban style app Update",
+    description: "this was a huge update stepping a big ahead converting a normal app to a kanban style app with a lot of new features and bug fixes.",
+  },
+  
 ];
 
 export default function UpdatesModal({ show, onClose }) {
