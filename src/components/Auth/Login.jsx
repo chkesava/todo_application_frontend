@@ -36,6 +36,10 @@ export default function Login() {
           Don’t have an account?{" "}
           <Link to="/register" className="underline hover:text-neon-pink">Register</Link>
         </p>
+        <p className="text-neon-cyan mt-5 text-center">
+          Forgot Password?{" "}
+          <Link to="/forgot" className="underline hover:text-neon-pink">Reset it here</Link>
+        </p>
       </div>
     </main>
   );

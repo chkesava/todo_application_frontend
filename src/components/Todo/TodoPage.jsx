@@ -7,11 +7,13 @@ import TodoList from "./TodoList";
 import TodoFilter from "./TodoFilter";
 import ProgressBar from "../ProgressBar";
 import { useNotification } from "../../context/useNotification";
+import UpdatesModal from "../UpdatesModal";
 
 export default function TodoPage() {
   const { user, logout, token } = useAuth();
   const [todos, setTodos] = useState([]);
   const [filters, setFilters] = useState({ search: "", priority: "", category: "", completed: "" });
+  const [showUpdates, setShowUpdates] = useState(false);
   const [refreshFlag, setRefreshFlag] = useState(0);
   const [dateTime, setDateTime] = useState(new Date());
   const { notify } = useNotification();
@@ -20,6 +22,10 @@ export default function TodoPage() {
 
   useEffect(() => {
     if (!token) return;
+    if (!sessionStorage.getItem("updatesSeen")) {
+      setShowUpdates(true);
+      sessionStorage.setItem("updatesSeen", "true");
+    }
     API.get("/todos", { params: filters })
       .then(({ data }) => setTodos(data.todos ?? []))
       .catch(() => notify("Failed to load todos.", "error"));
@@ -71,6 +77,7 @@ export default function TodoPage() {
           }}
         />
       </div>
+      <UpdatesModal show={showUpdates} onClose={() => setShowUpdates(false)} />
     </div>
   );
 }
