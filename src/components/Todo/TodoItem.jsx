@@ -8,7 +8,7 @@ export default function TodoItem({ todo, onChange }) {
   async function toggleComplete() {
     try {
       await API.put(`/todos/${todo._id}`, { completed: !todo.completed });
-      onChange();
+      onChange("complete");
     } catch {
       alert("Failed to update todo.");
     }
@@ -18,7 +18,7 @@ export default function TodoItem({ todo, onChange }) {
     if (!confirm("Are you sure you want to delete this todo?")) return;
     try {
       await API.put(`/todos/${todo._id}/soft-delete`);
-      onChange();
+      onChange("delete");
     } catch {
       alert("Failed to delete todo.");
     }
@@ -29,91 +29,105 @@ export default function TodoItem({ todo, onChange }) {
     try {
       await API.put(`/todos/${todo._id}`, { text });
       setEditing(false);
-      onChange();
+      onChange("edit");
     } catch {
       alert("Failed to update todo.");
     }
   }
 
   return (
-    <li className="p-4 bg-white rounded shadow flex flex-col md:flex-row md:items-center md:justify-between gap-2">
-      <div className="flex items-center gap-3 flex-grow">
-        <input
-          type="checkbox"
-          checked={todo.completed}
-          onChange={toggleComplete}
-          className="w-5 h-5"
-        />
-        {editing ? (
+    <li
+      className="p-5 rounded-xl border border-[var(--color-neon-blue)]
+                 bg-[var(--color-glass)] backdrop-blur-md shadow-neon
+                 text-white animate-neon transition-all duration-200"
+    >
+      <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-3">
+        {/* Checkbox + Text or Input */}
+        <div className="flex items-start md:items-center gap-3 flex-grow">
           <input
-            className="input input-bordered flex-grow"
-            value={text}
-            onChange={(e) => setText(e.target.value)}
+            type="checkbox"
+            checked={todo.completed}
+            onChange={toggleComplete}
+            className="w-5 h-5 accent-[var(--color-neon-blue)]"
           />
-        ) : (
-          <span
-            className={`text-lg ${
-              todo.completed ? "line-through text-gray-400" : ""
-            }`}
+
+          {/* Text (edit mode or not) */}
+          {editing ? (
+            <input
+              className="neon-input w-full"
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+            />
+          ) : (
+            <span
+              className={`text-lg leading-snug ${
+                todo.completed ? "line-through text-gray-400" : ""
+              }`}
+            >
+              {todo.text}
+            </span>
+          )}
+
+          {/* Priority Badge */}
+          {todo.priority && (
+            <span
+              className={`px-2 py-1 rounded text-xs font-semibold uppercase
+                ${
+                  todo.priority === "high"
+                    ? "bg-red-500 text-white"
+                    : todo.priority === "medium"
+                    ? "bg-yellow-500 text-black"
+                    : "bg-green-500 text-black"
+                }`}
+            >
+              {todo.priority}
+            </span>
+          )}
+        </div>
+
+        {/* Action Buttons */}
+        <div className="flex gap-2 items-center flex-wrap">
+          {editing ? (
+            <button
+              className="neon-btn px-3 py-1 text-sm"
+              onClick={saveEdit}
+            >
+              Save
+            </button>
+          ) : (
+            <button
+              className="neon-btn px-3 py-1 text-sm"
+              onClick={() => setEditing(true)}
+            >
+              Edit
+            </button>
+          )}
+          <button
+            className="bg-rose-600 px-3 py-1 text-sm text-white rounded-xl hover:bg-rose-700"
+            onClick={deleteTodo}
           >
-            {todo.text}
-          </span>
-        )}
-        {todo.priority && (
-          <span
-            className={`px-2 py-1 rounded text-xs font-semibold uppercase ${
-              todo.priority === "high"
-                ? "bg-red-200 text-red-700"
-                : todo.priority === "medium"
-                ? "bg-yellow-200 text-yellow-700"
-                : "bg-green-200 text-green-700"
-            }`}
-          >
-            {todo.priority}
-          </span>
-        )}
+            Delete
+          </button>
+        </div>
       </div>
 
-      <div className="flex gap-2 items-center flex-wrap mt-2 md:mt-0">
-        {editing ? (
-          <button
-            className="btn btn-success btn-sm"
-            onClick={saveEdit}
-            title="Save"
-          >
-            Save
-          </button>
-        ) : (
-          <button
-            className="btn btn-primary btn-sm"
-            onClick={() => setEditing(true)}
-            title="Edit"
-          >
-            Edit
-          </button>
-        )}
-        <button
-          className="btn btn-error btn-sm"
-          onClick={deleteTodo}
-          title="Delete"
-        >
-          Delete
-        </button>
-      </div>
-
-      {todo.category && (
-        <p className="text-sm text-gray-500 mt-1 md:mt-0 md:ml-4">
-          Category: {todo.category}
-        </p>
-      )}
-      {todo.dueDate && (
-        <p className="text-sm text-gray-500 mt-1 md:mt-0 md:ml-4">
-          Due: {new Date(todo.dueDate).toLocaleDateString()}
-        </p>
+      {/* Optional Meta Info ✨ */}
+      {(todo.category || todo.dueDate) && (
+        <div className="mt-3">
+          {todo.category && (
+            <p className="text-sm text-neon-cyan">🎯 Category: {todo.category}</p>
+          )}
+          {todo.dueDate && (
+            <p className="text-sm text-neon-cyan">
+              📅 Due: {new Date(todo.dueDate).toLocaleDateString()}
+            </p>
+          )}
+        </div>
       )}
 
+      {/* Subtasks */}
       {todo.subtasks && todo.subtasks.length > 0 && (
-        <ul className="mt-2 ml-7 list-disc space-y-1">
+        <ul className="mt-3 list-disc list-inside space-y-1">
           {todo.subtasks.map((subtask, idx) => (
             <li key={idx} className="flex items-center gap-2">
               <input
@@ -127,15 +141,15 @@ export default function TodoItem({ todo, onChange }) {
                     await API.put(`/todos/${todo._id}`, {
                       subtasks: updatedSubtasks,
                     });
-                    onChange();
+                    onChange("edit");
                   } catch {
                     alert("Failed to update subtask.");
                   }
                 }}
-                className="w-4 h-4"
+                className="w-4 h-4 accent-[var(--color-neon-blue)]"
               />
               <span
-                className={`${
+                className={`text-sm ${
                   subtask.completed ? "line-through text-gray-400" : ""
                 }`}
               >

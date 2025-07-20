@@ -48,34 +48,44 @@ export default function TodoForm({ onAdd }) {
       });
       if (onAdd) onAdd();
     } catch (err) {
-      alert("Failed to add todo", err);
+      alert("Failed to add todo.");
     }
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 bg-gray-50 p-4 rounded">
+    <form
+      onSubmit={handleSubmit}
+      className="bg-[color:var(--color-glass)] backdrop-blur-md rounded-super border border-[var(--color-neon-blue)] shadow-neon p-6 space-y-5 animate-neon"
+    >
+      {/* Main Task Text */}
       <input
         type="text"
         name="text"
         placeholder="What do you need to do?"
-        className="input input-bordered w-full"
+        className="neon-input w-full"
         value={form.text}
         onChange={handleChange}
         required
       />
 
-      <div className="flex gap-2 flex-wrap">
-        <select name="priority" value={form.priority} onChange={handleChange} className="select select-bordered">
-          <option value="low">Low Priority</option>
-          <option value="medium">Medium Priority</option>
-          <option value="high">High Priority</option>
+      {/* PRI / CAT / DUE */}
+      <div className="flex flex-col sm:flex-row gap-4">
+        <select
+          name="priority"
+          value={form.priority}
+          onChange={handleChange}
+          className="neon-input flex-1"
+        >
+          <option value="low">⬇️ Low Priority</option>
+          <option value="medium">⚖️ Medium Priority</option>
+          <option value="high">⬆️ High Priority</option>
         </select>
 
         <input
           type="text"
           name="category"
-          placeholder="Category (optional)"
-          className="input input-bordered flex-grow"
+          placeholder="📦 Category (optional)"
+          className="neon-input flex-1"
           value={form.category}
           onChange={handleChange}
         />
@@ -83,37 +93,48 @@ export default function TodoForm({ onAdd }) {
         <input
           type="date"
           name="dueDate"
-          className="input input-bordered"
+          className="neon-input flex-1 text-white"
           value={form.dueDate}
           onChange={handleChange}
         />
       </div>
 
+      {/* Subtasks */}
       <div>
-        <label className="font-semibold mb-1 block">Subtasks:</label>
+        <label className="block font-semibold text-neon-cyan mb-2 mt-4">🧩 Subtasks</label>
         {form.subtasks.map((subtask, i) => (
-          <div key={i} className="flex gap-2 items-center mb-2">
+          <div key={i} className="flex gap-3 items-center mb-2">
             <input
               type="text"
-              placeholder="Subtask text"
-              className="input input-bordered flex-grow"
+              placeholder={`Subtask ${i + 1}`}
+              className="neon-input w-full"
               value={subtask.text}
               onChange={(e) => updateSubtask(i, e.target.value)}
             />
             {form.subtasks.length > 1 && (
-              <button type="button" className="btn btn-error" onClick={() => removeSubtask(i)}>
-                &times;
+              <button
+                type="button"
+                className="bg-rose-600 text-white px-2 py-1 rounded-xl hover:bg-rose-700"
+                onClick={() => removeSubtask(i)}
+              >
+                ❌
               </button>
             )}
           </div>
         ))}
-        <button type="button" className="btn btn-outline" onClick={addSubtask}>
-          + Add Subtask
+        {/* Add subtask button */}
+        <button
+          type="button"
+          onClick={addSubtask}
+          className="neon-btn px-4 py-2 mt-2 text-sm"
+        >
+          ➕ Add Subtask
         </button>
       </div>
 
-      <button type="submit" className="btn btn-primary w-full">
-        Add To-Do
+      {/* Submit Button */}
+      <button type="submit" className="w-full neon-btn py-3 text-lg tracking-wide">
+        ✅ Add To-Do
       </button>
     </form>
   );

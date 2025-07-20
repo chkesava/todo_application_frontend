@@ -20,17 +20,30 @@ export default function TodoList({ filters, refreshFlag, onChange }) {
   }, [filters, refreshFlag]);
 
   if (loading) {
-    return <div className="text-center py-4 text-blue-500 font-semibold">Loading your todos...</div>;
+    return (
+      <div className="text-center py-6 text-[var(--color-neon-blue)] font-bold animate-pulse">
+        🔄 Loading your glowing to-dos...
+      </div>
+    );
   }
 
   if (!todos.length) {
-    return <div className="text-center text-gray-500 py-4 text-lg">📭 You have no to-dos yet!</div>;
+    return (
+      <div className="text-center text-sm text-[var(--color-neon-cyan)] bg-[color:var(--color-glass)] p-6 rounded-super border border-neon shadow-neon mt-6 animate-neon">
+        📭 You have no tasks yet!<br />
+        Tap the neon button above to add your first to-do.
+      </div>
+    );
   }
 
   return (
     <ul className="space-y-4">
       {todos.map((todo) => (
-        <TodoItem key={todo._id} todo={todo} onChange={onChange} />
+        <TodoItem
+          key={todo._id}
+          todo={todo}
+          onChange={onChange}
+        />
       ))}
     </ul>
   );

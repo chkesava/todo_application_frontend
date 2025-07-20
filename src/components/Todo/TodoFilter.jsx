@@ -5,46 +5,55 @@ export default function TodoFilter({ filters, setFilters, onFilterChange }) {
     setFilters({ ...filters, [key]: value });
   }
 
-  // Trigger filter change on filters update
   useEffect(() => {
     onFilterChange();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filters]);
 
   return (
-    <div className="flex flex-wrap gap-2 p-4 bg-gray-50 rounded mt-4">
+    <div
+      className="flex flex-wrap gap-3 p-6 mt-6 backdrop-blur-md rounded-super border border-[var(--color-neon-blue)]
+                 bg-[rgba(20,20,30,0.7)] shadow-neon animate-neon"
+    >
+      {/* Search input */}
       <input
         type="text"
-        placeholder="Search To-Dos"
+        placeholder="🔎 Search To-Dos"
         value={filters.search}
         onChange={(e) => setFilter(e.target.value, "search")}
-        className="input input-bordered flex-grow min-w-[220px]"
+        className="neon-input flex-1 min-w-[220px]"
       />
+
+      {/* Priority dropdown */}
       <select
-        className="select select-bordered"
         value={filters.priority}
         onChange={(e) => setFilter(e.target.value, "priority")}
+        className="neon-input w-48"
       >
-        <option value="">Priority</option>
-        <option value="low">Low</option>
-        <option value="medium">Medium</option>
-        <option value="high">High</option>
+        <option value="">🎯 Priority</option>
+        <option value="low">⬇️ Low</option>
+        <option value="medium">⚖️ Medium</option>
+        <option value="high">⬆️ High</option>
       </select>
+
+      {/* Category input */}
       <input
         type="text"
-        placeholder="Category"
+        placeholder="📦 Category"
         value={filters.category}
         onChange={(e) => setFilter(e.target.value, "category")}
-        className="input input-bordered"
+        className="neon-input w-48"
       />
+
+      {/* Completion filter */}
       <select
-        className="select select-bordered"
         value={filters.completed}
         onChange={(e) => setFilter(e.target.value, "completed")}
+        className="neon-input w-40"
       >
-        <option value="">All</option>
-        <option value="false">Active</option>
-        <option value="true">Completed</option>
+        <option value="">📝 All</option>
+        <option value="false">🟡 Active</option>
+        <option value="true">✅ Completed</option>
       </select>
     </div>
   );

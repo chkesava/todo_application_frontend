@@ -9,12 +9,9 @@ export default function Login() {
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (Cookies.get("token")) navigate("/");
-  }, [navigate]);
+  useEffect(() => { if (Cookies.get("token")) navigate("/"); }, [navigate]);
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -27,16 +24,19 @@ export default function Login() {
   };
 
   return (
-    <main className="max-w-md mx-auto mt-24 p-6 bg-white rounded shadow">
-      <h2 className="text-2xl font-bold mb-4 text-center">Login</h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <input name="email" type="email" placeholder="Email" className="input input-bordered w-full" onChange={handleChange} required />
-        <input name="password" type="password" placeholder="Password" className="input input-bordered w-full" onChange={handleChange} required />
-        <button className="btn btn-primary w-full">Login</button>
-      </form>
-      <p className="mt-4 text-center text-sm">
-        Don't have an account? <Link to="/register" className="text-blue-600 font-semibold">Register here</Link>
-      </p>
+    <main className="min-h-screen flex items-center justify-center">
+      <div className="bg-[color:var(--color-glass)] rounded-super neon-border max-w-md w-full p-10 shadow-2xl backdrop-blur-md animate-neon">
+        <h2 className="text-3xl font-extrabold mb-7 text-center text-[color:var(--color-neon-blue)] drop-shadow">Sign In</h2>
+        <form className="space-y-6" onSubmit={handleSubmit}>
+          <input name="email" type="email" placeholder="Email" required className="w-full neon-input" value={form.email} onChange={handleChange} />
+          <input name="password" type="password" placeholder="Password" required className="w-full neon-input" value={form.password} onChange={handleChange} />
+          <button className="w-full neon-btn py-2 text-lg tracking-wider">Sign In</button>
+        </form>
+        <p className="text-neon-cyan mt-5 text-center">
+          Don’t have an account?{" "}
+          <Link to="/register" className="underline hover:text-neon-pink">Register</Link>
+        </p>
+      </div>
     </main>
   );
 }

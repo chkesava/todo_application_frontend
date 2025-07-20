@@ -1,17 +1,69 @@
 @import "tailwindcss";
 
-
-@keyframes slideIn {
-  from {
-    transform: translateY(-30px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
+@theme {
+  --color-neon-blue: #18baff;
+  --color-neon-cyan: #22e4fd;
+  --color-neon-pink: #f945ff;
+  --color-neon-violet: #a259f7;
+  --color-glass: rgba(20, 20, 30, 0.90);
+  --color-surface: rgba(30, 34, 65, 0.95);
+  --rounded-super: 1.5rem;
 }
 
-.animate-slideIn {
-  animation: slideIn 0.3s ease-in-out;
+body {
+  background: linear-gradient(120deg, #111423 60%, #181d29 100%);
+  color: #f0f4ff;
+}
+
+/* Softer Neon Border */
+.neon-border {
+  border: 1.5px solid var(--color-neon-blue);
+  box-shadow:
+    0 0 2px var(--color-neon-blue),
+    0 0 4px var(--color-neon-cyan);
+}
+
+/* Neon Button — ⚡ Softer glow */
+.neon-btn {
+  background: var(--color-neon-blue);
+  border: 1.5px solid var(--color-neon-pink);
+  color: #100a18;
+  font-weight: bold;
+  box-shadow:
+    0 0 4px var(--color-neon-violet),
+    0 0 12px var(--color-neon-pink);
+  border-radius: var(--rounded-super);
+  transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
+}
+.neon-btn:hover {
+  background: var(--color-neon-cyan);
+  box-shadow:
+    0 0 6px var(--color-neon-cyan),
+    0 0 14px var(--color-neon-blue);
+  transform: scale(1.03);
+}
+
+/* Neon Input — 🚥 Softer borders and shadows */
+.neon-input {
+  background: var(--color-surface);
+  border: 1.5px solid var(--color-neon-blue);
+  color: #f0f4ff;
+  border-radius: var(--rounded-super);
+  padding: 0.75rem 1.15rem;
+  box-shadow: 0 0 5px var(--color-neon-blue), 0 0 10px var(--color-neon-cyan);
+}
+.neon-input:focus {
+  border-color: var(--color-neon-pink);
+  box-shadow: 0 0 6px var(--color-neon-violet);
+  outline: none;
+}
+
+/* Entry animation (no change needed) */
+@keyframes neonFadeIn {
+  from { opacity: 0; transform: translateY(-18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.animate-neon {
+  animation: neonFadeIn 0.5s cubic-bezier(.52,1.55,.69,.67);
 }
