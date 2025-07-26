@@ -34,7 +34,7 @@ export default function ProgressBar() {
 
   return (
     <div className="mb-4">
-      <div className="flex j  ustify-between text-xs text-neon-cyan mb-1">
+      <div className="flex justify-between text-xs text-neon-cyan mb-1">
         <span>Progress</span>
         <span>{loading ? "Loading..." : `${percent}% (${completed}/${total})`}</span>
       </div>
