@@ -20,16 +20,46 @@ export default function TodoPage() {
 
   useEffect(() => { const timer = setInterval(() => setDateTime(new Date()), 20000); return () => clearInterval(timer); }, []);
 
-  useEffect(() => {
-    if (!token) return;
-    if (!sessionStorage.getItem("updatesSeen")) {
-      setShowUpdates(true);
-      sessionStorage.setItem("updatesSeen", "true");
+  // useEffect(() => {
+  //   if (!token) return;
+  //   if (!sessionStorage.getItem("updatesSeen")) {
+  //     setShowUpdates(true);
+  //     sessionStorage.setItem("updatesSeen", "true");
+  //   }
+  //   console.log(filters.completed);
+  //   API.get("/todos", { params: filters })
+  //     .then(({ data }) => setTodos(data.todos ?? []))
+  //     .catch(() => notify("Failed to load todos.", "error"));
+  // }, [filters, refreshFlag]);
+useEffect(() => {
+  if (!token) return;
+
+  if (!sessionStorage.getItem("updatesSeen")) {
+    setShowUpdates(true);
+    sessionStorage.setItem("updatesSeen", "true");
+  }
+
+  console.log(filters.completed);
+
+  async function fetchTodos() {
+    try {
+      let response;
+      if (filters.completed === "") {
+        // Call /todos endpoint without any query parameters to fetch all todos
+        response = await API.get("/todos");
+      } else {
+        // Call /todos endpoint with filters as query parameters
+        response = await API.get("/todos", { params: filters });
+      }
+      setTodos(response.data.todos ?? []);
+      console.log("Todos fetched:", response.data.todos);
+    } catch (error) {
+      notify("Failed to load todos.", error.response?.data?.message || "error");
     }
-    API.get("/todos", { params: filters })
-      .then(({ data }) => setTodos(data.todos ?? []))
-      .catch(() => notify("Failed to load todos.", "error"));
-  }, [filters, refreshFlag]);
+  }
+
+  fetchTodos();
+}, [filters, refreshFlag]);
 
   if (!user) return <Navigate to="/login" />;
 

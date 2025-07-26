@@ -17,12 +17,17 @@ const updatesData = [
   //   description: "App maintenance window: Aug 1, 11:00 PM – 1:00 AM IST.",
   // }
   // Add more updates as needed
+  // {
+  //   date: "TO be announced",
+  //   title: "kanban style app Update",
+  //   description: "this was a huge update stepping a big ahead converting a normal app to a kanban style app with a lot of new features and bug fixes.",
+  // },
   {
-    date: "TO be announced",
-    title: "kanban style app Update",
-    description: "this was a huge update stepping a big ahead converting a normal app to a kanban style app with a lot of new features and bug fixes.",
-  },
-  
+  "date": "2025-07-26",
+  "title": "Improved Filtering and Progress Tracking Update",
+  "description": "Fixed the frontend filter to correctly show all todos when 'All' is selected. Updated backend API to properly handle completed filter including empty string as no filter. Improved frontend API calls to omit filter parameters when not needed. Refactored ProgressBar component to fetch and display progress independently. Enhanced error handling and loading states for a smoother user experience."
+},
+
 ];
 
 export default function UpdatesModal({ show, onClose }) {

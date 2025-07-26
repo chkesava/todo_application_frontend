@@ -6,18 +6,28 @@ export default function TodoList({ filters, refreshFlag, onChange }) {
   const [todos, setTodos] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  // 
   useEffect(() => {
-    async function fetchTodos() {
-      setLoading(true);
-      try {
-        const { data } = await API.get("/todos", { params: filters });
-        setTodos(data.todos || []);
-      } finally {
-        setLoading(false);
+  async function fetchTodos() {
+    setLoading(true);
+    try {
+      let response;
+      if (filters.completed === "") {
+        // Call without query parameters to get all todos
+        response = await API.get("/todos");
+      } else {
+        // Call with filters as query parameters
+        response = await API.get("/todos", { params: filters });
       }
+      setTodos(response.data.todos || []);
+    } finally {
+      setLoading(false);
     }
-    fetchTodos();
-  }, [filters, refreshFlag]);
+  }
+
+  fetchTodos();
+}, [filters, refreshFlag]);
+
 
   if (loading) {
     return (
